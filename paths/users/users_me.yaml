@@ -1,0 +1,54 @@
+operations:
+  get:
+    operationId: getUserMe
+    tags:
+      - users
+    summary: Get my info
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetUserMeResponse'
+  put:
+    operationId: putUserMe
+    tags:
+      - users
+    summary: Edit my info
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PutUserMeRequest'
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutUserMeResponse'
+
+components:
+  schemas:
+    GetUserMeResponse:
+      type: object
+      properties:
+        user:
+          $ref: ../../components/schemas/users/User.yaml#/User
+      required:
+        - user
+    PutUserMeRequest:
+      type: object
+      properties:
+        user:
+          $ref: ../../components/schemas/users/User.yaml#/User
+      required:
+        - user
+    PutUserMeResponse:
+      type: object
+      properties:
+        user:
+          $ref: ../../components/schemas/users/User.yaml#/User
+      required:
+        - user

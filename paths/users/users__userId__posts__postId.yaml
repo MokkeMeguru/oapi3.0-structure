@@ -1,0 +1,20 @@
+operations:
+  delete:
+    operationId: deletePost
+    tags:
+      - users
+    summary: Delete a specific post by postId for userId
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: postId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '204':
+        description: No Content

@@ -1,0 +1,29 @@
+operations:
+  get:
+    operationId: getCommentById
+    tags:
+      - users
+    summary: Get a specific comment by commentId for a post by postId for userId
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: postId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: commentId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: ../../components/schemas/users/Comment.yaml#/Comment

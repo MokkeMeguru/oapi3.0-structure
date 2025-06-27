@@ -1,0 +1,61 @@
+operations:
+  get:
+    operationId: getUserPosts
+    tags:
+      - users
+    summary: Get user's posts
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetUserPostsResponse'
+  post:
+    operationId: createPost
+    tags:
+      - users
+    summary: Create a new post for userId
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreatePostRequest'
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePostResponse'
+
+components:
+  schemas:
+    GetUserPostsResponse:
+      type: array
+      items:
+        $ref: ../../components/schemas/users/Post.yaml#/Post
+    CreatePostRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+      required:
+        - title
+        - content
+    CreatePostResponse:
+      $ref: ../../components/schemas/users/Post.yaml#/Post

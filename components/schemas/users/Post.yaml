@@ -1,0 +1,15 @@
+Post:
+  type: object
+  properties:
+    id:
+      type: string
+      description: Unique identifier of the post
+    title:
+      type: string
+      description: Title of the post
+    content:
+      type: string
+      description: Content of the post
+    author:
+      $ref: './User.yaml#/User'
+      description: Author of the post

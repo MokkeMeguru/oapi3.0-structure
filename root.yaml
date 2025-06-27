@@ -1,0 +1,19 @@
+openapi: 3.0.2
+info:
+  title: Sample API
+  version: 1.0.0
+paths:
+  /users/me:
+    $ref: ./paths/users/users_me.yaml#/operations
+  /users/{userId}:
+    $ref: ./paths/users/users__userId.yaml#/operations
+  /users/{userId}/posts:
+    $ref: ./paths/users/users__userId__posts.yaml#/operations
+  /users/{userId}/posts/{postId}:
+    $ref: ./paths/users/users__userId__posts__postId.yaml#/operations
+  /users/{userId}/comments:
+    $ref: ./paths/users/users__userId__comments.yaml#/operations
+  /users/{userId}/posts/{postId}/comments/{commentId}:
+    $ref: ./paths/users/users__userId__posts__postId__comments__commentId.yaml#/operations
+  /products/{productId}:
+    $ref: ./paths/products/products__productId.yaml#/operations

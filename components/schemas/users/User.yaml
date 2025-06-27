@@ -1,0 +1,14 @@
+User:
+  type: object
+  properties:
+    id:
+      type: string
+      description: Unique identifier of the user
+    name:
+      type: string
+      description: Name of the user
+    recentPosts:
+      type: array
+      items:
+        $ref: './Post.yaml#/Post'
+      description: List of recent posts by the user

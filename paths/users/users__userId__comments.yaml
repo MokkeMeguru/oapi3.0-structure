@@ -1,0 +1,30 @@
+operations:
+  get:
+    operationId: getUserComments
+    tags:
+      - users
+    summary: Get comments made by userId
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetUserCommentsResponse'
+components:
+  schemas:
+    GetUserCommentsResponse:
+      description: List of comments made by the user
+      type: object
+      properties:
+        comments:
+          description: List of comments made by the user
+          type: array
+          items:
+            $ref: '../../components/schemas/users/Comment.yaml#/Comment'

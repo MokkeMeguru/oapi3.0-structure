@@ -1,0 +1,24 @@
+operations:
+  get:
+    operationId: getProductById
+    tags:
+      - products
+    summary: Get product by ID
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetProductByIdResponse'
+
+components:
+  schemas:
+    GetProductByIdResponse:
+      $ref: ../../components/schemas/products/Product.yaml#/Product

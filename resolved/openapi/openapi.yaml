@@ -1,0 +1,407 @@
+openapi: 3.0.2
+info:
+  title: Sample API
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /users/me:
+    get:
+      operationId: getUserMe
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserMeResponse'
+          description: OK
+      summary: Get my info
+      tags:
+      - users
+    put:
+      operationId: putUserMe
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutUserMeRequest'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutUserMeResponse'
+          description: OK
+      summary: Edit my info
+      tags:
+      - users
+  /users/{userId}:
+    get:
+      operationId: getUserById
+      parameters:
+      - in: path
+        name: userId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserByIdResponse'
+          description: OK
+      summary: Get user's info
+      tags:
+      - users
+  /users/{userId}/posts:
+    get:
+      operationId: getUserPosts
+      parameters:
+      - in: path
+        name: userId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserPostsResponse'
+          description: OK
+      summary: Get user's posts
+      tags:
+      - users
+    post:
+      operationId: createPost
+      parameters:
+      - in: path
+        name: userId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePostRequest'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePostResponse'
+          description: OK
+      summary: Create a new post for userId
+      tags:
+      - users
+  /users/{userId}/posts/{postId}:
+    delete:
+      operationId: deletePost
+      parameters:
+      - in: path
+        name: userId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: postId
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+      summary: Delete a specific post by postId for userId
+      tags:
+      - users
+  /users/{userId}/comments:
+    get:
+      operationId: getUserComments
+      parameters:
+      - in: path
+        name: userId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserCommentsResponse'
+          description: OK
+      summary: Get comments made by userId
+      tags:
+      - users
+  /users/{userId}/posts/{postId}/comments/{commentId}:
+    get:
+      operationId: getCommentById
+      parameters:
+      - in: path
+        name: userId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: postId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: commentId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+          description: OK
+      summary: Get a specific comment by commentId for a post by postId for userId
+      tags:
+      - users
+  /products/{productId}:
+    get:
+      operationId: getProductById
+      parameters:
+      - in: path
+        name: productId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetProductByIdResponse'
+          description: OK
+      summary: Get product by ID
+      tags:
+      - products
+components:
+  schemas:
+    GetUserMeResponse:
+      example:
+        user:
+          recentPosts:
+          - author: null
+            id: id
+            title: title
+            content: content
+          - author: null
+            id: id
+            title: title
+            content: content
+          name: name
+          id: id
+      properties:
+        user:
+          $ref: '#/components/schemas/User_1'
+      required:
+      - user
+      type: object
+    PutUserMeResponse:
+      example:
+        user:
+          recentPosts:
+          - author: null
+            id: id
+            title: title
+            content: content
+          - author: null
+            id: id
+            title: title
+            content: content
+          name: name
+          id: id
+      properties:
+        user:
+          $ref: '#/components/schemas/User_1'
+      required:
+      - user
+      type: object
+    PutUserMeRequest:
+      example:
+        user:
+          recentPosts:
+          - author: null
+            id: id
+            title: title
+            content: content
+          - author: null
+            id: id
+            title: title
+            content: content
+          name: name
+          id: id
+      properties:
+        user:
+          $ref: '#/components/schemas/User_1'
+      required:
+      - user
+      type: object
+    GetUserByIdResponse:
+      $ref: '#/components/schemas/User'
+    User:
+      example:
+        recentPosts:
+        - author: null
+          id: id
+          title: title
+          content: content
+        - author: null
+          id: id
+          title: title
+          content: content
+        name: name
+        id: id
+      properties:
+        id:
+          description: Unique identifier of the user
+          type: string
+        name:
+          description: Name of the user
+          type: string
+        recentPosts:
+          description: List of recent posts by the user
+          items:
+            $ref: '#/components/schemas/Post'
+          type: array
+      type: object
+    GetUserPostsResponse:
+      items:
+        $ref: '#/components/schemas/Post_1'
+      type: array
+    CreatePostResponse:
+      $ref: '#/components/schemas/Post'
+    Post:
+      example:
+        author: null
+        id: id
+        title: title
+        content: content
+      properties:
+        id:
+          description: Unique identifier of the post
+          type: string
+        title:
+          description: Title of the post
+          type: string
+        content:
+          description: Content of the post
+          type: string
+        author:
+          $ref: '#/components/schemas/User'
+      type: object
+    CreatePostRequest:
+      example:
+        title: title
+        content: content
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+      required:
+      - content
+      - title
+      type: object
+    GetUserCommentsResponse:
+      description: List of comments made by the user
+      example:
+        comments:
+        - id: id
+          text: text
+          postId: postId
+        - id: id
+          text: text
+          postId: postId
+      properties:
+        comments:
+          description: List of comments made by the user
+          items:
+            $ref: '#/components/schemas/Comment'
+          type: array
+      type: object
+    Comment:
+      example:
+        id: id
+        text: text
+        postId: postId
+      properties:
+        id:
+          type: string
+        text:
+          type: string
+        postId:
+          type: string
+      type: object
+    GetProductByIdResponse:
+      $ref: '#/components/schemas/Product'
+    Product:
+      example:
+        price: 0.8008281904610115
+        name: name
+        id: id
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        price:
+          type: number
+      required:
+      - id
+      - name
+      - price
+      type: object
+    User_1:
+      example:
+        recentPosts:
+        - author: null
+          id: id
+          title: title
+          content: content
+        - author: null
+          id: id
+          title: title
+          content: content
+        name: name
+        id: id
+      properties:
+        id:
+          description: Unique identifier of the user
+          type: string
+        name:
+          description: Name of the user
+          type: string
+        recentPosts:
+          description: List of recent posts by the user
+          items:
+            $ref: '#/components/schemas/Post_1'
+          type: array
+      type: object
+    Post_1:
+      example:
+        author: null
+        id: id
+        title: title
+        content: content
+      properties:
+        id:
+          description: Unique identifier of the post
+          type: string
+        title:
+          description: Title of the post
+          type: string
+        content:
+          description: Content of the post
+          type: string
+        author:
+          $ref: '#/components/schemas/User_1'
+      type: object

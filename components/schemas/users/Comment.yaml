@@ -1,0 +1,9 @@
+Comment:
+  type: object
+  properties:
+    id:
+      type: string
+    text:
+      type: string
+    postId:
+      type: string
