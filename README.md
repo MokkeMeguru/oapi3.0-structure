@@ -50,7 +50,7 @@
 paths:
   /users/{userId}:
     # users__userId.yaml ファイル内の "operations" キーを指す
-    $ref: ./paths/users/users__userId.yaml#/operations
+    $ref: "./paths/users/users__userId.yaml#/operations"
 ```
 
 ### パターン2: `paths/` → `components/` (スキーマの参照)
@@ -68,7 +68,7 @@ operations:
             schema:
               # 1. 相対パスでファイルを探し
               # 2. JSONポインタ(#/User)でその中のキーを指す
-              $ref: '''../../components/schemas/users/User.yaml#/User'''
+              $ref: "../../components/schemas/users/User.yaml#/User"
 ```
 
 ### パターン3: `components/` → `components/` (スキーマ間の参照)
@@ -84,7 +84,7 @@ User:
       type: array
       items:
         # 同じディレクトリにある Post.yaml の Post キーを指す
-        $ref: '''./Post.yaml#/Post'''
+        $ref: "./Post.yaml#/Post"
 ```
 
 ---
@@ -103,7 +103,7 @@ info:
 paths:
   # ... 既存のパス ...
   /new/path:
-    $ref: ./paths/new/new_path.yaml#/operations
+    $ref: "./paths/new/new_path.yaml#/operations"
 ```
 
 ### Path File (`paths/[Tag]/...yaml`)
@@ -124,7 +124,7 @@ operations:
           application/json:
             schema:
               # 必要に応じてコンポーネントを参照
-              $ref: '''../../components/schemas/new/NewObject.yaml#/NewObject'''
+              $ref: "../../components/schemas/new/NewObject.yaml#/NewObject"
 ```
 
 ### Component Schema File (`components/schemas/[Tag]/...yaml`)
