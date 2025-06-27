@@ -28,7 +28,6 @@ operations:
           application/json:
             schema:
               $ref: '#/components/schemas/PutUserMeResponse'
-
 components:
   schemas:
     GetUserMeResponse:

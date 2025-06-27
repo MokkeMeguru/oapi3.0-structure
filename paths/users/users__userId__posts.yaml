@@ -40,7 +40,6 @@ operations:
           application/json:
             schema:
               $ref: '#/components/schemas/CreatePostResponse'
-
 components:
   schemas:
     GetUserPostsResponse:

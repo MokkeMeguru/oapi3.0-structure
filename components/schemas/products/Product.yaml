@@ -6,7 +6,7 @@ Product:
     name:
       type: string
     price:
-      type: number  
+      type: number
   required:
     - id
     - name
