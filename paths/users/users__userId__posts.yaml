@@ -4,6 +4,9 @@ operations:
     tags:
       - users
     summary: Get user's posts
+    description: |
+      指定されたユーザーIDが作成した投稿のリストを取得します。
+      このエンドポイントは、ユーザーのブログや記事の一覧表示に利用されます。
     parameters:
       - name: userId
         in: path
@@ -22,6 +25,9 @@ operations:
     tags:
       - users
     summary: Create a new post for userId
+    description: |
+      指定されたユーザーIDに対して新しい投稿を作成します。
+      このエンドポイントは、ユーザーが新しいコンテンツを公開するために利用されます。
     parameters:
       - name: userId
         in: path

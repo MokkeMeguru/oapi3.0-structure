@@ -53,22 +53,31 @@ paths:
     $ref: "./paths/users/users__userId.yaml#/operations"
 ```
 
-### パターン2: `paths/` → `components/` (スキーマの参照)
+### パターン2: `paths/` 内でのスキーマ定義と `components/` への参照
 
-パス定義ファイルは、リクエストボディやレスポンスで使うデータモデルを`components/schemas/`以下のファイルから参照します。参照には**相対パス**と**JSONポインタ**を組み合わせます。
+各パス定義ファイルは、リクエストボディとレスポンスのスキーマをファイル内で直接定義します。これらのスキーマ名は、規約として **`[operationId]Request`** および **`[operationId]Response`** と命名します。
+
+そして、その定義の中から`$ref`を使い、`components/schemas/`以下にある共通のデータモデルを参照します。これにより、パス固有のスキーマ定義と共通コンポーネントの再利用を両立させています。
 
 **`paths/users/users__userId.yaml`**
 ```yaml
 operations:
   get:
+    operationId: getUserById
     responses:
       '200':
         content:
           application/json:
             schema:
-              # 1. 相対パスでファイルを探し
-              # 2. JSONポインタ(#/User)でその中のキーを指す
-              $ref: "../../components/schemas/users/User.yaml#/User"
+              # 1. 同じファイル内のcomponentsセクションを参照
+              $ref: "#/components/schemas/GetUserByIdResponse"
+# 同じファイル内にcomponentsセクションを定義
+components:
+  schemas:
+    # operationId に基づいて命名
+    GetUserByIdResponse:
+      # 2. 共通コンポーネントを相対パスで参照
+      $ref: "../../components/schemas/users/User.yaml#/User"
 ```
 
 ### パターン3: `components/` → `components/` (スキーマ間の参照)
@@ -108,23 +117,41 @@ paths:
 
 ### Path File (`paths/[Tag]/...yaml`)
 
-**重要**: すべての操作 (`get`, `post`等) は `operations` キーで囲んでください。
+**重要**:
+- すべての操作 (`get`, `post`等) は `operations` キーで囲んでください。
+- リクエストボディとレスポンスのスキーマは、ファイル下部の`components`セクションで定義し、命名規則は **`[operationId]Request`** / **`[operationId]Response`** に従います。
 
 ```yaml
 operations:
-  get:
-    operationId: getNewPath
+  post:
+    operationId: createNewPath
     tags:
       - new
-    summary: Get new path
+    summary: Create a new resource
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CreateNewPathRequest"
     responses:
       '200':
         description: OK
         content:
           application/json:
             schema:
-              # 必要に応じてコンポーネントを参照
-              $ref: "../../components/schemas/new/NewObject.yaml#/NewObject"
+              $ref: "#/components/schemas/CreateNewPathResponse"
+
+# このファイル内で使用するリクエスト/レスポンスのスキーマを定義
+components:
+  schemas:
+    CreateNewPathRequest:
+      type: object
+      properties:
+        name:
+          type: string
+    CreateNewPathResponse:
+      # 共通コンポーネントを参照
+      $ref: "../../components/schemas/new/NewObject.yaml#/NewObject"
 ```
 
 ### Component Schema File (`components/schemas/[Tag]/...yaml`)

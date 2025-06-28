@@ -4,6 +4,9 @@ operations:
     tags:
       - users
     summary: Get my info
+    description: |
+      認証されたユーザー自身の情報を取得します。
+      このエンドポイントは、ログイン中のユーザーのプロフィール表示に利用されます。
     responses:
       '200':
         description: OK
@@ -16,6 +19,9 @@ operations:
     tags:
       - users
     summary: Edit my info
+    description: |
+      認証されたユーザー自身の情報を更新します。
+      このエンドポイントは、ログイン中のユーザーが自身のプロフィールを編集するために利用されます。
     requestBody:
       content:
         application/json:

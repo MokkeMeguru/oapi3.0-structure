@@ -4,6 +4,9 @@ operations:
     tags:
       - users
     summary: Get user's info
+    description: |
+      指定されたユーザーIDに基づいて、単一のユーザー情報を取得します。
+      このエンドポイントは、ユーザーのプロフィール表示や管理のために利用されます。
     parameters:
       - name: userId
         in: path

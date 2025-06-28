@@ -2,7 +2,7 @@
 
 gen:
 	@echo "Generating OpenAPI specification..."
-	@docker run --rm -v "$(CURDIR):/local" openapitools/openapi-generator-cli generate \
+	@docker run --rm --user "$(id -u):$(id -g)" -v "$(CURDIR):/local" openapitools/openapi-generator-cli generate \
 	-i /local/root.yaml \
 	-g openapi-yaml \
 	-o /local/resolved

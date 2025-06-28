@@ -1,9 +1,17 @@
 Comment:
   type: object
+  description: ユーザーが投稿したコメントの情報を表すスキーマです。
   properties:
     id:
       type: string
+      description: コメントを一意に識別するIDです。
     text:
       type: string
+      description: コメントの本文です。
     postId:
       type: string
+      description: このコメントが紐づく投稿のIDです。
+  required:
+    - id
+    - text
+    - postId

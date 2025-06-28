@@ -4,6 +4,9 @@ operations:
     tags:
       - users
     summary: Delete a specific post by postId for userId
+    description: |
+      指定されたユーザーIDと投稿IDに基づいて、特定の投稿を削除します。
+      このエンドポイントは、ユーザーが自身の投稿を管理するために利用されます。
     parameters:
       - name: userId
         in: path

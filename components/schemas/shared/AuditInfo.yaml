@@ -1,0 +1,12 @@
+AuditInfo:
+  type: object
+  description: 作成日時と更新日時を持つ、監査用の共通スキーマです。
+  properties:
+    createdAt:
+      type: string
+      format: date-time
+      description: リソースが作成された日時です。
+    updatedAt:
+      type: string
+      format: date-time
+      description: リソースが最後に更新された日時です。

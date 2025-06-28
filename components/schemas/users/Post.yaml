@@ -1,15 +1,23 @@
 Post:
   type: object
+  description: ユーザーが作成した投稿の情報を表すスキーマです。
   properties:
     id:
       type: string
-      description: Unique identifier of the post
+      description: 投稿を一意に識別するIDです。
     title:
       type: string
-      description: Title of the post
+      description: 投稿のタイトルです。
     content:
       type: string
-      description: Content of the post
+      description: 投稿の本文内容です。
     author:
       $ref: './User.yaml#/User'
-      description: Author of the post
+      description: この投稿の作成者です。
+    audit:
+      $ref: '../shared/AuditInfo.yaml#/AuditInfo'
+  required:
+    - id
+    - title
+    - content
+    - author

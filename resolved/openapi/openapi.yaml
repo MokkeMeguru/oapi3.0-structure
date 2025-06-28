@@ -7,6 +7,9 @@ servers:
 paths:
   /users/me:
     get:
+      description: |
+        認証されたユーザー自身の情報を取得します。
+        このエンドポイントは、ログイン中のユーザーのプロフィール表示に利用されます。
       operationId: getUserMe
       responses:
         "200":
@@ -19,6 +22,9 @@ paths:
       tags:
       - users
     put:
+      description: |
+        認証されたユーザー自身の情報を更新します。
+        このエンドポイントは、ログイン中のユーザーが自身のプロフィールを編集するために利用されます。
       operationId: putUserMe
       requestBody:
         content:
@@ -37,6 +43,9 @@ paths:
       - users
   /users/{userId}:
     get:
+      description: |
+        指定されたユーザーIDに基づいて、単一のユーザー情報を取得します。
+        このエンドポイントは、ユーザーのプロフィール表示や管理のために利用されます。
       operationId: getUserById
       parameters:
       - in: path
@@ -56,6 +65,9 @@ paths:
       - users
   /users/{userId}/posts:
     get:
+      description: |
+        指定されたユーザーIDが作成した投稿のリストを取得します。
+        このエンドポイントは、ユーザーのブログや記事の一覧表示に利用されます。
       operationId: getUserPosts
       parameters:
       - in: path
@@ -74,6 +86,9 @@ paths:
       tags:
       - users
     post:
+      description: |
+        指定されたユーザーIDに対して新しい投稿を作成します。
+        このエンドポイントは、ユーザーが新しいコンテンツを公開するために利用されます。
       operationId: createPost
       parameters:
       - in: path
@@ -98,6 +113,9 @@ paths:
       - users
   /users/{userId}/posts/{postId}:
     delete:
+      description: |
+        指定されたユーザーIDと投稿IDに基づいて、特定の投稿を削除します。
+        このエンドポイントは、ユーザーが自身の投稿を管理するために利用されます。
       operationId: deletePost
       parameters:
       - in: path
@@ -118,6 +136,9 @@ paths:
       - users
   /users/{userId}/comments:
     get:
+      description: |
+        指定されたユーザーIDが作成したコメントのリストを取得します。
+        このエンドポイントは、ユーザーの活動履歴やコメントの管理に利用されます。
       operationId: getUserComments
       parameters:
       - in: path
@@ -137,6 +158,9 @@ paths:
       - users
   /users/{userId}/posts/{postId}/comments/{commentId}:
     get:
+      description: |
+        指定されたユーザーID、投稿ID、コメントIDに基づいて、特定のコメントを取得します。
+        このエンドポイントは、特定のコメントの詳細表示に利用されます。
       operationId: getCommentById
       parameters:
       - in: path
@@ -166,6 +190,9 @@ paths:
       - users
   /products/{productId}:
     get:
+      description: |
+        指定された商品IDに基づいて、単一の商品情報を取得します。
+        このエンドポイントは、商品の詳細表示や編集のために利用されます。
       operationId: getProductById
       parameters:
       - in: path
@@ -248,6 +275,7 @@ components:
     GetUserByIdResponse:
       $ref: '#/components/schemas/User'
     User:
+      description: ユーザーの情報を表すスキーマです。
       example:
         recentPosts:
         - author: null
@@ -262,16 +290,19 @@ components:
         id: id
       properties:
         id:
-          description: Unique identifier of the user
+          description: ユーザーを一意に識別するIDです。
           type: string
         name:
-          description: Name of the user
+          description: ユーザーの表示名です。
           type: string
         recentPosts:
-          description: List of recent posts by the user
+          description: このユーザーが最近行った投稿のリストです。
           items:
             $ref: '#/components/schemas/Post'
           type: array
+      required:
+      - id
+      - name
       type: object
     GetUserPostsResponse:
       items:
@@ -280,6 +311,7 @@ components:
     CreatePostResponse:
       $ref: '#/components/schemas/Post'
     Post:
+      description: ユーザーが作成した投稿の情報を表すスキーマです。
       example:
         author: null
         id: id
@@ -287,16 +319,21 @@ components:
         content: content
       properties:
         id:
-          description: Unique identifier of the post
+          description: 投稿を一意に識別するIDです。
           type: string
         title:
-          description: Title of the post
+          description: 投稿のタイトルです。
           type: string
         content:
-          description: Content of the post
+          description: 投稿の本文内容です。
           type: string
         author:
           $ref: '#/components/schemas/User'
+      required:
+      - author
+      - content
+      - id
+      - title
       type: object
     CreatePostRequest:
       example:
@@ -329,38 +366,56 @@ components:
           type: array
       type: object
     Comment:
+      description: ユーザーが投稿したコメントの情報を表すスキーマです。
       example:
         id: id
         text: text
         postId: postId
       properties:
         id:
+          description: コメントを一意に識別するIDです。
           type: string
         text:
+          description: コメントの本文です。
           type: string
         postId:
+          description: このコメントが紐づく投稿のIDです。
           type: string
+      required:
+      - id
+      - postId
+      - text
       type: object
     GetProductByIdResponse:
       $ref: '#/components/schemas/Product'
     Product:
+      description: 商品の詳細情報を表すスキーマです。
       example:
-        price: 0.8008281904610115
+        price: 0.8008282
         name: name
         id: id
+        category: null
       properties:
         id:
+          description: 商品を一意に識別するIDです。
           type: string
         name:
+          description: 商品の名称です。
           type: string
         price:
+          description: 商品の価格です。
+          format: float
           type: number
+        category:
+          $ref: '#/components/schemas/ProductCategory'
       required:
+      - category
       - id
       - name
       - price
       type: object
     User_1:
+      description: ユーザーの情報を表すスキーマです。
       example:
         recentPosts:
         - author: null
@@ -375,18 +430,22 @@ components:
         id: id
       properties:
         id:
-          description: Unique identifier of the user
+          description: ユーザーを一意に識別するIDです。
           type: string
         name:
-          description: Name of the user
+          description: ユーザーの表示名です。
           type: string
         recentPosts:
-          description: List of recent posts by the user
+          description: このユーザーが最近行った投稿のリストです。
           items:
             $ref: '#/components/schemas/Post_1'
           type: array
+      required:
+      - id
+      - name
       type: object
     Post_1:
+      description: ユーザーが作成した投稿の情報を表すスキーマです。
       example:
         author: null
         id: id
@@ -394,14 +453,28 @@ components:
         content: content
       properties:
         id:
-          description: Unique identifier of the post
+          description: 投稿を一意に識別するIDです。
           type: string
         title:
-          description: Title of the post
+          description: 投稿のタイトルです。
           type: string
         content:
-          description: Content of the post
+          description: 投稿の本文内容です。
           type: string
         author:
           $ref: '#/components/schemas/User_1'
+      required:
+      - author
+      - content
+      - id
+      - title
       type: object
+    ProductCategory:
+      description: 商品のカテゴリを表します。
+      enum:
+      - Electronics
+      - Books
+      - Clothes
+      - Food
+      - Other
+      type: string

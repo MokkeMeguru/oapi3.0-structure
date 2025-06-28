@@ -4,6 +4,9 @@ operations:
     tags:
       - users
     summary: Get comments made by userId
+    description: |
+      指定されたユーザーIDが作成したコメントのリストを取得します。
+      このエンドポイントは、ユーザーの活動履歴やコメントの管理に利用されます。
     parameters:
       - name: userId
         in: path

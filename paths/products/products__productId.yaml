@@ -4,6 +4,9 @@ operations:
     tags:
       - products
     summary: Get product by ID
+    description: |
+      指定された商品IDに基づいて、単一の商品情報を取得します。
+      このエンドポイントは、商品の詳細表示や編集のために利用されます。
     parameters:
       - name: productId
         in: path

@@ -1,13 +1,24 @@
 Product:
   type: object
+  description: 商品の詳細情報を表すスキーマです。
   properties:
     id:
       type: string
+      description: 商品を一意に識別するIDです。
     name:
       type: string
+      description: 商品の名称です。
     price:
       type: number
+      format: float
+      description: 商品の価格です。
+    category:
+      $ref: './ProductCategory.yaml#/ProductCategory'
+      description: 商品のカテゴリを表します。
+    audit:
+      $ref: '../shared/AuditInfo.yaml#/AuditInfo'
   required:
     - id
     - name
     - price
+    - category

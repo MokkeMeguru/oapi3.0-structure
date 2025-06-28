@@ -4,6 +4,9 @@ operations:
     tags:
       - users
     summary: Get a specific comment by commentId for a post by postId for userId
+    description: |
+      指定されたユーザーID、投稿ID、コメントIDに基づいて、特定のコメントを取得します。
+      このエンドポイントは、特定のコメントの詳細表示に利用されます。
     parameters:
       - name: userId
         in: path
