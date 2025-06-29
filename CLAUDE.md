@@ -54,7 +54,7 @@ recentPosts:
 
 - **Path files**: `domain__resource__subresource.yaml` (e.g., `users__userId__posts.yaml`)
 - **Schema files**: `ModelName.yaml` (e.g., `User.yaml`, `Post.yaml`) 
-- **Request/Response schemas**: `[operationId]Request` / `[operationId]Response`
+- **Local schemas in path files**: `[operationId]Request`, `[operationId]Response`, `[operationId]RequestBody`, `[operationId]ResponseBody`
 - **Shared schemas**: Located in `components/schemas/shared/`
 
 ## Development Workflow

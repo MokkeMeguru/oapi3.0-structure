@@ -51,6 +51,45 @@ components:
                 $ref: ../../components/schemas/users/PostSummary.yaml
               description: このユーザーが最近行った投稿のリストです。
     PutUserMeRequest:
-      $ref: ../../components/schemas/users/User.yaml
+      type: object
+      properties:
+        profile:
+          $ref: '#/components/schemas/PutUserMeRequestBody'
+        preferences:
+          type: object
+          properties:
+            language:
+              type: string
+              enum: [ja, en]
+            theme:
+              type: string
+              enum: [light, dark]
+    PutUserMeRequestBody:
+      allOf:
+        - $ref: ../../components/schemas/users/User.yaml
+        - type: object
+          properties:
+            bio:
+              type: string
+              description: ユーザーの自己紹介文
     PutUserMeResponse:
-      $ref: ../../components/schemas/users/User.yaml
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/PutUserMeResponseBody'
+        message:
+          type: string
+          description: 更新完了メッセージ
+        timestamp:
+          type: string
+          format: date-time
+    PutUserMeResponseBody:
+      allOf:
+        - $ref: ../../components/schemas/users/User.yaml
+        - type: object
+          properties:
+            updatedFields:
+              type: array
+              items:
+                type: string
+              description: 更新されたフィールドのリスト

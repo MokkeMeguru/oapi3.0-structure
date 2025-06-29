@@ -98,7 +98,11 @@ paths:
 
 ### Path File (`paths/[Tag]/...yaml`)
 
-**重要**: 操作は`operations`キーで囲む。スキーマは`[operationId]Request/Response`で命名。
+**重要**: 操作は`operations`キーで囲む。ローカルスキーマの命名規則:
+- `[operationId]Request` - requestBodyのスキーマ
+- `[operationId]Response` - responseスキーマ
+- `[operationId]RequestBody` - 複雑なrequestBodyの場合
+- `[operationId]ResponseBody` - 複雑なresponseBodyの場合
 
 ```yaml
 operations:
@@ -126,10 +130,25 @@ components:
     CreateNewPathRequest:
       type: object
       properties:
+        data:
+          $ref: "#/components/schemas/CreateNewPathRequestBody"
+        metadata:
+          type: object
+    CreateNewPathRequestBody:
+      type: object
+      properties:
         name:
           type: string
+        description:
+          type: string
     CreateNewPathResponse:
-      # 共通コンポーネントを参照
+      type: object
+      properties:
+        result:
+          $ref: "#/components/schemas/CreateNewPathResponseBody"
+        status:
+          type: string
+    CreateNewPathResponseBody:
       $ref: "../../components/schemas/new/NewObject.yaml"
 ```
 

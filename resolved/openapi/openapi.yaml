@@ -214,7 +214,7 @@ components:
   schemas:
     GetUserMeResponse:
       allOf:
-      - $ref: '#/components/schemas/User_1'
+      - $ref: '#/components/schemas/User'
       - properties:
           recentPosts:
             description: このユーザーが最近行った投稿のリストです。
@@ -223,25 +223,55 @@ components:
             type: array
         type: object
     PutUserMeResponse:
+      example:
+        message: message
+        user: null
+        timestamp: 2000-01-23T04:56:07.000+00:00
+      properties:
+        user:
+          $ref: '#/components/schemas/PutUserMeResponseBody'
+        message:
+          description: 更新完了メッセージ
+          type: string
+        timestamp:
+          format: date-time
+          type: string
+      type: object
+    PutUserMeResponseBody:
+      allOf:
+      - $ref: '#/components/schemas/User'
+      - properties:
+          updatedFields:
+            description: 更新されたフィールドのリスト
+            items:
+              type: string
+            type: array
+        type: object
+    PutUserMeRequest:
+      example:
+        preferences:
+          language: ja
+          theme: light
+        profile: null
+      properties:
+        profile:
+          $ref: '#/components/schemas/PutUserMeRequestBody'
+        preferences:
+          $ref: '#/components/schemas/PutUserMeRequest_preferences'
+      type: object
+    PutUserMeRequestBody:
+      allOf:
+      - $ref: '#/components/schemas/User'
+      - properties:
+          bio:
+            description: ユーザーの自己紹介文
+            type: string
+        type: object
+    GetUserByIdResponse:
       $ref: '#/components/schemas/User'
     User:
       description: ユーザーの情報を表すスキーマです。
       example:
-        recentPosts:
-        - author: null
-          audit:
-            createdAt: 2000-01-23T04:56:07.000+00:00
-            updatedAt: 2000-01-23T04:56:07.000+00:00
-          id: id
-          title: title
-          content: content
-        - author: null
-          audit:
-            createdAt: 2000-01-23T04:56:07.000+00:00
-            updatedAt: 2000-01-23T04:56:07.000+00:00
-          id: id
-          title: title
-          content: content
         name: name
         id: id
       properties:
@@ -251,19 +281,10 @@ components:
         name:
           description: ユーザーの表示名です。
           type: string
-        recentPosts:
-          description: このユーザーが最近行った投稿のリストです。
-          items:
-            $ref: '#/components/schemas/Post'
-          type: array
       required:
       - id
       - name
       type: object
-    PutUserMeRequest:
-      $ref: '#/components/schemas/User'
-    GetUserByIdResponse:
-      $ref: '#/components/schemas/User'
     GetUserPostsResponse:
       items:
         $ref: '#/components/schemas/PostSummary'
@@ -273,7 +294,9 @@ components:
     Post:
       description: ユーザーが作成した投稿の情報を表すスキーマです。
       example:
-        author: null
+        author:
+          name: name
+          id: id
         audit:
           createdAt: 2000-01-23T04:56:07.000+00:00
           updatedAt: 2000-01-23T04:56:07.000+00:00
@@ -384,24 +407,6 @@ components:
       - name
       - price
       type: object
-    User_1:
-      description: ユーザーの情報を表すスキーマです。
-      properties:
-        id:
-          description: ユーザーを一意に識別するIDです。
-          type: string
-        name:
-          description: ユーザーの表示名です。
-          type: string
-        recentPosts:
-          description: このユーザーが最近行った投稿のリストです。
-          items:
-            $ref: '#/components/schemas/Post_1'
-          type: array
-      required:
-      - id
-      - name
-      type: object
     PostSummary:
       description: 投稿の要約情報を表すスキーマです。作成者情報は含まれません。
       example:
@@ -452,25 +457,19 @@ components:
       - Food
       - Other
       type: string
-    Post_1:
-      description: ユーザーが作成した投稿の情報を表すスキーマです。
+    PutUserMeRequest_preferences:
+      example:
+        language: ja
+        theme: light
       properties:
-        id:
-          description: 投稿を一意に識別するIDです。
+        language:
+          enum:
+          - ja
+          - en
           type: string
-        title:
-          description: 投稿のタイトルです。
+        theme:
+          enum:
+          - light
+          - dark
           type: string
-        content:
-          description: 投稿の本文内容です。
-          type: string
-        author:
-          $ref: '#/components/schemas/User_1'
-        audit:
-          $ref: '#/components/schemas/AuditInfo'
-      required:
-      - author
-      - content
-      - id
-      - title
       type: object

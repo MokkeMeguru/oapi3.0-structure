@@ -83,7 +83,7 @@ def resolve_refs(obj, current_file_path, schema_to_file_map):
                 if schema_name in schema_to_file_map:
                     target_path = schema_to_file_map[schema_name]
                     relative_path = os.path.relpath(target_path, start=current_file_path.parent)
-                    obj['$ref'] = f"{relative_path.replace(os.path.sep, '/')}#/{schema_name}"
+                    obj['$ref'] = relative_path.replace(os.path.sep, '/')
         for key, value in obj.items():
             resolve_refs(value, current_file_path, schema_to_file_map)
     elif isinstance(obj, list):
@@ -121,7 +121,7 @@ def decompose_openapi(input_file, output_dir):
 
     all_schemas = openapi_spec.get('components', {}).get('schemas', {})
 
-    path_local_schema_names = {s for s in all_schemas if s.endswith('Request') or s.endswith('Response')}
+    path_local_schema_names = {s for s in all_schemas if s.endswith(('Request', 'Response', 'RequestBody', 'ResponseBody'))}
     global_schema_names = set(all_schemas.keys()) - path_local_schema_names
 
     global_schema_to_file_map = {}
@@ -137,7 +137,7 @@ def decompose_openapi(input_file, output_dir):
         schema_obj = all_schemas[schema_name]
         resolve_refs(schema_obj, schema_file, global_schema_to_file_map)
         with open(schema_file, 'w', encoding='utf-8') as f:
-            yaml.dump(OrderedDict([(schema_name, schema_obj)]), f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+            yaml.dump(schema_obj, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
 
     new_paths = OrderedDict()
     for path, path_item in sorted(openapi_spec.get('paths', {}).items()):
@@ -152,9 +152,36 @@ def decompose_openapi(input_file, output_dir):
 
         local_schemas = OrderedDict()
         path_item_str = yaml.dump(path_item)
+        
+        # Find directly referenced schemas
+        directly_referenced = set()
         for schema_name in sorted(list(path_local_schema_names)):
             if f"#/components/schemas/{schema_name}" in path_item_str:
-                local_schemas[schema_name] = all_schemas[schema_name]
+                directly_referenced.add(schema_name)
+        
+        # Find recursively referenced local schemas
+        def find_local_dependencies(schema_name, visited=None):
+            if visited is None:
+                visited = set()
+            if schema_name in visited or schema_name not in all_schemas:
+                return set()
+            visited.add(schema_name)
+            
+            dependencies = set()
+            schema_str = yaml.dump(all_schemas[schema_name])
+            for local_schema in path_local_schema_names:
+                if local_schema != schema_name and f"#/components/schemas/{local_schema}" in schema_str:
+                    dependencies.add(local_schema)
+                    dependencies.update(find_local_dependencies(local_schema, visited.copy()))
+            return dependencies
+        
+        # Include all related local schemas
+        included_schemas = set(directly_referenced)
+        for schema_name in directly_referenced:
+            included_schemas.update(find_local_dependencies(schema_name))
+        
+        for schema_name in sorted(included_schemas):
+            local_schemas[schema_name] = all_schemas[schema_name]
         
         file_content = OrderedDict()
         file_content["operations"] = OrderedDict(sorted(path_item.items(), key=lambda i: ['get', 'post', 'put', 'delete'].index(i[0]) if i[0] in ['get', 'post', 'put', 'delete'] else 100))
