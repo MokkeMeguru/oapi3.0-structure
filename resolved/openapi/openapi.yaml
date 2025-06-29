@@ -213,76 +213,32 @@ paths:
 components:
   schemas:
     GetUserMeResponse:
-      example:
-        user:
+      allOf:
+      - $ref: '#/components/schemas/User_1'
+      - properties:
           recentPosts:
-          - author: null
-            id: id
-            title: title
-            content: content
-          - author: null
-            id: id
-            title: title
-            content: content
-          name: name
-          id: id
-      properties:
-        user:
-          $ref: '#/components/schemas/User_1'
-      required:
-      - user
-      type: object
+            description: このユーザーが最近行った投稿のリストです。
+            items:
+              $ref: '#/components/schemas/PostSummary'
+            type: array
+        type: object
     PutUserMeResponse:
-      example:
-        user:
-          recentPosts:
-          - author: null
-            id: id
-            title: title
-            content: content
-          - author: null
-            id: id
-            title: title
-            content: content
-          name: name
-          id: id
-      properties:
-        user:
-          $ref: '#/components/schemas/User_1'
-      required:
-      - user
-      type: object
-    PutUserMeRequest:
-      example:
-        user:
-          recentPosts:
-          - author: null
-            id: id
-            title: title
-            content: content
-          - author: null
-            id: id
-            title: title
-            content: content
-          name: name
-          id: id
-      properties:
-        user:
-          $ref: '#/components/schemas/User_1'
-      required:
-      - user
-      type: object
-    GetUserByIdResponse:
       $ref: '#/components/schemas/User'
     User:
       description: ユーザーの情報を表すスキーマです。
       example:
         recentPosts:
         - author: null
+          audit:
+            createdAt: 2000-01-23T04:56:07.000+00:00
+            updatedAt: 2000-01-23T04:56:07.000+00:00
           id: id
           title: title
           content: content
         - author: null
+          audit:
+            createdAt: 2000-01-23T04:56:07.000+00:00
+            updatedAt: 2000-01-23T04:56:07.000+00:00
           id: id
           title: title
           content: content
@@ -304,9 +260,13 @@ components:
       - id
       - name
       type: object
+    PutUserMeRequest:
+      $ref: '#/components/schemas/User'
+    GetUserByIdResponse:
+      $ref: '#/components/schemas/User'
     GetUserPostsResponse:
       items:
-        $ref: '#/components/schemas/Post_1'
+        $ref: '#/components/schemas/PostSummary'
       type: array
     CreatePostResponse:
       $ref: '#/components/schemas/Post'
@@ -314,6 +274,9 @@ components:
       description: ユーザーが作成した投稿の情報を表すスキーマです。
       example:
         author: null
+        audit:
+          createdAt: 2000-01-23T04:56:07.000+00:00
+          updatedAt: 2000-01-23T04:56:07.000+00:00
         id: id
         title: title
         content: content
@@ -329,6 +292,8 @@ components:
           type: string
         author:
           $ref: '#/components/schemas/User'
+        audit:
+          $ref: '#/components/schemas/AuditInfo'
       required:
       - author
       - content
@@ -392,6 +357,9 @@ components:
       description: 商品の詳細情報を表すスキーマです。
       example:
         price: 0.8008282
+        audit:
+          createdAt: 2000-01-23T04:56:07.000+00:00
+          updatedAt: 2000-01-23T04:56:07.000+00:00
         name: name
         id: id
         category: null
@@ -408,6 +376,8 @@ components:
           type: number
         category:
           $ref: '#/components/schemas/ProductCategory'
+        audit:
+          $ref: '#/components/schemas/AuditInfo'
       required:
       - category
       - id
@@ -416,18 +386,6 @@ components:
       type: object
     User_1:
       description: ユーザーの情報を表すスキーマです。
-      example:
-        recentPosts:
-        - author: null
-          id: id
-          title: title
-          content: content
-        - author: null
-          id: id
-          title: title
-          content: content
-        name: name
-        id: id
       properties:
         id:
           description: ユーザーを一意に識別するIDです。
@@ -444,10 +402,12 @@ components:
       - id
       - name
       type: object
-    Post_1:
-      description: ユーザーが作成した投稿の情報を表すスキーマです。
+    PostSummary:
+      description: 投稿の要約情報を表すスキーマです。作成者情報は含まれません。
       example:
-        author: null
+        audit:
+          createdAt: 2000-01-23T04:56:07.000+00:00
+          updatedAt: 2000-01-23T04:56:07.000+00:00
         id: id
         title: title
         content: content
@@ -461,13 +421,27 @@ components:
         content:
           description: 投稿の本文内容です。
           type: string
-        author:
-          $ref: '#/components/schemas/User_1'
+        audit:
+          $ref: '#/components/schemas/AuditInfo'
       required:
-      - author
       - content
       - id
       - title
+      type: object
+    AuditInfo:
+      description: 作成日時と更新日時を持つ、監査用の共通スキーマです。
+      example:
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+      properties:
+        createdAt:
+          description: リソースが作成された日時です。
+          format: date-time
+          type: string
+        updatedAt:
+          description: リソースが最後に更新された日時です。
+          format: date-time
+          type: string
       type: object
     ProductCategory:
       description: 商品のカテゴリを表します。
@@ -478,3 +452,25 @@ components:
       - Food
       - Other
       type: string
+    Post_1:
+      description: ユーザーが作成した投稿の情報を表すスキーマです。
+      properties:
+        id:
+          description: 投稿を一意に識別するIDです。
+          type: string
+        title:
+          description: 投稿のタイトルです。
+          type: string
+        content:
+          description: 投稿の本文内容です。
+          type: string
+        author:
+          $ref: '#/components/schemas/User_1'
+        audit:
+          $ref: '#/components/schemas/AuditInfo'
+      required:
+      - author
+      - content
+      - id
+      - title
+      type: object

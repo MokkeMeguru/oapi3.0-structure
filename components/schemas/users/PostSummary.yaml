@@ -1,5 +1,5 @@
 type: object
-description: ユーザーが作成した投稿の情報を表すスキーマです。
+description: 投稿の要約情報を表すスキーマです。作成者情報は含まれません。
 properties:
   id:
     type: string
@@ -10,13 +10,9 @@ properties:
   content:
     type: string
     description: 投稿の本文内容です。
-  author:
-    $ref: "./User.yaml"
-    description: この投稿の作成者です。
   audit:
     $ref: "../shared/AuditInfo.yaml"
 required:
   - id
   - title
   - content
-  - author

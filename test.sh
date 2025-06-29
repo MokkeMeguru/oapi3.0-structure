@@ -15,7 +15,7 @@ cp "$ORIGINAL_OPENAPI" "$TEST_DIR/original_openapi.yaml"
 
 # 2. Decompose the copied openapi.yaml
 echo "Decomposing openapi.yaml..."
-python3 decompose.py "$TEST_DIR/original_openapi.yaml" --output "$TEST_DIR"
+python3 scripts/decompose.py "$TEST_DIR/original_openapi.yaml" --output "$TEST_DIR"
 
 # 3. Recombine the decomposed files using openapi-generator-cli
 echo "Recombining decomposed files using openapi-generator-cli..."
@@ -27,6 +27,6 @@ docker run --rm --user "$(id -u):$(id -g)" -v "$(pwd)/$TEST_DIR:/local" openapit
 
 # 4. Compare the original and re-combined openapi.yaml files
 echo "Comparing original and re-combined openapi.yaml files..."
-python3 compare_yamls.py "$TEST_DIR/original_openapi.yaml" "$TEST_DIR/resolved/openapi/openapi.yaml"
+python3 scripts/compare_yamls.py "$TEST_DIR/original_openapi.yaml" "$TEST_DIR/resolved/openapi/openapi.yaml"
 
 echo "Test completed successfully!"

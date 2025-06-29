@@ -30,4 +30,4 @@ components:
           description: List of comments made by the user
           type: array
           items:
-            $ref: '../../components/schemas/users/Comment.yaml#/Comment'
+            $ref: '../../components/schemas/users/Comment.yaml'

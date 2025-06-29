@@ -91,12 +91,25 @@ def resolve_refs(obj, current_file_path, schema_to_file_map):
             resolve_refs(item, current_file_path, schema_to_file_map)
 
 def decompose_openapi(input_file, output_dir):
-    with open(input_file, 'r', encoding='utf-8') as f:
+    # スクリプトのディレクトリからプロジェクトルートに移動
+    script_dir = Path(__file__).parent
+    project_root = script_dir.parent
+    
+    # 入力ファイルパスが相対パスの場合、プロジェクトルートからの相対パスとして解釈
+    input_path = Path(input_file)
+    if not input_path.is_absolute():
+        input_path = project_root / input_file
+        
+    with open(input_path, 'r', encoding='utf-8') as f:
         openapi_spec = yaml.safe_load(f)
 
     unify_duplicate_schemas(openapi_spec)
-
+    
+    # 出力パスが相対パスの場合、プロジェクトルートからの相対パスとして解釈
     output_path = Path(output_dir)
+    if not output_path.is_absolute():
+        output_path = project_root / output_dir
+        
     paths_dir = output_path / 'paths'
     components_dir = output_path / 'components' / 'schemas'
 

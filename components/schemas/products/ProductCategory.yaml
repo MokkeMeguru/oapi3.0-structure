@@ -1,9 +1,8 @@
-ProductCategory:
-  type: string
-  description: 商品のカテゴリを表します。
-  enum:
-    - Electronics
-    - Books
-    - Clothes
-    - Food
-    - Other
+type: string
+description: 商品のカテゴリを表します。
+enum:
+  - Electronics
+  - Books
+  - Clothes
+  - Food
+  - Other

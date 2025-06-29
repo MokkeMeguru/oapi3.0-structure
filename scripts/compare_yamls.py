@@ -1,11 +1,25 @@
 import yaml
 import sys
+from pathlib import Path
 
 def compare_yamls(file1_path, file2_path):
+    # スクリプトのディレクトリからプロジェクトルートに移動
+    script_dir = Path(__file__).parent
+    project_root = script_dir.parent
+    
+    # 入力ファイルパスが相対パスの場合、プロジェクトルートからの相対パスとして解釈
+    path1 = Path(file1_path)
+    if not path1.is_absolute():
+        path1 = project_root / file1_path
+        
+    path2 = Path(file2_path)
+    if not path2.is_absolute():
+        path2 = project_root / file2_path
+    
     try:
-        with open(file1_path, 'r', encoding='utf-8') as f1:
+        with open(path1, 'r', encoding='utf-8') as f1:
             data1 = yaml.safe_load(f1)
-        with open(file2_path, 'r', encoding='utf-8') as f2:
+        with open(path2, 'r', encoding='utf-8') as f2:
             data2 = yaml.safe_load(f2)
     except FileNotFoundError as e:
         print(f"Error: File not found - {e.filename}", file=sys.stderr)
@@ -104,10 +118,10 @@ def compare_yamls(file1_path, file2_path):
             return obj1 == obj2
 
     if deep_compare(data1_normalized, data2_normalized):
-        print(f"YAML files '{file1_path}' and '{file2_path}' are structurally identical.")
+        print(f"YAML files '{path1}' and '{path2}' are structurally identical.")
         return True
     else:
-        print(f"YAML files '{file1_path}' and '{file2_path}' are structurally different.", file=sys.stderr)
+        print(f"YAML files '{path1}' and '{path2}' are structurally different.", file=sys.stderr)
         return False
 
 if __name__ == '__main__':

@@ -51,7 +51,7 @@ components:
     GetUserPostsResponse:
       type: array
       items:
-        $ref: ../../components/schemas/users/Post.yaml#/Post
+        $ref: ../../components/schemas/users/PostSummary.yaml
     CreatePostRequest:
       type: object
       properties:
@@ -63,4 +63,4 @@ components:
         - title
         - content
     CreatePostResponse:
-      $ref: ../../components/schemas/users/Post.yaml#/Post
+      $ref: ../../components/schemas/users/Post.yaml

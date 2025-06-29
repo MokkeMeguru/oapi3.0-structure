@@ -1,0 +1,9 @@
+apis:
+  main:
+    root: ./root.yaml
+rules:
+  no-unresolved-refs: error
+  no-identical-paths: error
+  no-undefined-server-variable: error
+extends:
+  - recommended
